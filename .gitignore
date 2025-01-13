@@ -1,0 +1,7 @@
+.vscode/
+.DS_Store
+client
+server
+lyrics
+lyrics.db
+.songstash.conf
