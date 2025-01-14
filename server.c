@@ -40,6 +40,12 @@ int main(int argc, char **argv)
   addr.sin_port = htons(8080);
   addr.sin_addr.s_addr = INADDR_ANY;
 
+  if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0)
+  {
+    perror("setsockopt(SO_REUSEADDR) failed");
+    return 1;
+  }
+
   if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)))
   {
     perror("bind");

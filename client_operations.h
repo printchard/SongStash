@@ -3,7 +3,7 @@
 
 #include "model.h"
 
-void lookup_lyrics();
+void lookup_lyrics(char *song_name);
 void insert_lyrics(Lyrics *lyrics);
 
 #endif

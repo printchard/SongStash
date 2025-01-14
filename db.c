@@ -65,11 +65,6 @@ int lookup_lyrics(sqlite3 *db, char *query, Lyrics *lyrics)
     lyrics[count].artist = strdup((char *)sqlite3_column_text(stmt, 2));
     lyrics[count].release_year = sqlite3_column_int(stmt, 3);
     lyrics[count].lyrics = strdup((char *)sqlite3_column_text(stmt, 4));
-    printf("ID: %d\n", lyrics[count].id);
-    printf("Song Name: %s\n", lyrics[count].song_name);
-    printf("Artist: %s\n", lyrics[count].artist);
-    printf("Release Year: %d\n", lyrics[count].release_year);
-    printf("Lyrics: %s\n", lyrics[count].lyrics);
     count++;
   }
 

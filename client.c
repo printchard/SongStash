@@ -65,10 +65,13 @@ int main(int argc, char **argv)
     lyrics.release_year = atoi(argv[4]);
     lyrics.lyrics = argv[5];
     insert_lyrics(&lyrics);
-    }
+  }
   else if (strcmp(argv[1], "lookup") == 0)
   {
-    lookup_lyrics();
+    if (argc < 3)
+      lookup_lyrics("");
+    else
+      lookup_lyrics(argv[2]);
   }
   else if (strcmp(argv[1], "config") == 0)
   {

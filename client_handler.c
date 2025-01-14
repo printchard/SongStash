@@ -43,12 +43,29 @@ void handle_client(int client_sock)
   {
   case LOOKUP:
   {
-    char *q = "SELECT * FROM lyrics LIMIT 10;";
-    Lyrics *lyrics = (Lyrics *)malloc(sizeof(Lyrics) * 10);
+    char *baseQ = "SELECT * FROM lyrics LIMIT 10;";
+    char *q = baseQ;
+    char *song_name;
+    int song_name_len;
+    recv(client_sock, &song_name_len, sizeof(int), 0);
+    if (song_name_len > 0)
+    {
+      song_name = malloc(sizeof(char) * song_name_len);
+      recv(client_sock, song_name, sizeof(char) * song_name_len, 0);
+      q = malloc(strlen(baseQ) + song_name_len + 1);
+      sprintf(q, "SELECT * FROM lyrics WHERE song_name LIKE '%%%s%%';", song_name);
+    }
+    Lyrics lyrics[50];
+    printf("Looking up lyrics: %s\n", q);
     int count = lookup_lyrics(db, q, lyrics);
     printf("Sending %d lyrics\n", count);
     send_lyrics_arr(client_sock, lyrics, count);
     free_lyrics_arr(lyrics, count);
+    if (q != baseQ)
+    {
+      free(q);
+      free(song_name);
+    }
     break;
   }
 

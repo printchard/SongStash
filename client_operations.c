@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "model.h"
 #include "client_config.h"
@@ -37,15 +38,28 @@ int setup_connection()
   return sock;
 }
 
-void lookup_lyrics()
+void lookup_lyrics(char *song_name)
 {
   int socket = setup_connection();
   if (socket == -1)
     return;
+
   Operation op_type = LOOKUP;
   send(socket, &op_type, sizeof(Operation), 0);
+  int song_name_len = strlen(song_name);
+  if (song_name_len > 0)
+  {
+    send(socket, &song_name_len, sizeof(int), 0);
+    send(socket, song_name, song_name_len, 0);
+  }
+  else
+  {
+    send(socket, &song_name_len, sizeof(int), 0);
+  }
+  recv(socket, NULL, 10, 0);
   Lyrics *lyrics;
   int count = recv_lyrics_arr(socket, &lyrics);
+  printf("Received %d lyrics\n", count);
   for (int i = 0; i < count; i++)
   {
     printf("ID: %d\n", lyrics[i].id);

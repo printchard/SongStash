@@ -93,5 +93,4 @@ void free_lyrics_arr(Lyrics *lyrics, int count)
 {
   for (int i = 0; i < count; i++)
     free_lyrics(&lyrics[i]);
-  free(lyrics);
 }
