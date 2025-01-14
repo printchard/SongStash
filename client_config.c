@@ -53,7 +53,7 @@ void set_port(int port)
 {
   printf("Setting port to %d\n", port);
   char line[1024];
-  char *url = malloc(1024);
+  char url[1024];
   strcpy(url, "localhost");
 
   FILE *fp = fopen(CONFIG_PATH, "r");
@@ -66,7 +66,7 @@ void set_port(int port)
     fread(line, 1, 1024, fp);
     char *split = strchr(line, ':');
     split[0] = '\0';
-    url = strcpy(url, line);
+    strcpy(url, line);
   }
 
   fp = fopen(CONFIG_PATH, "w");
@@ -76,7 +76,6 @@ void set_port(int port)
     return;
   }
   fprintf(fp, "%s:%d\n", url, port);
-  free(url);
   fclose(fp);
 }
 

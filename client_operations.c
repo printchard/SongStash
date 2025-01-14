@@ -33,7 +33,6 @@ int setup_connection()
   }
 
   send(sock, HANDSHAKE, sizeof(HANDSHAKE), 0);
-  printf("Sent handshake: %s\n", HANDSHAKE);
   free(url);
   return sock;
 }
@@ -42,10 +41,7 @@ void lookup_lyrics()
 {
   int socket = setup_connection();
   if (socket == -1)
-  {
     return;
-  }
-  printf("Connected to server\n");
   Operation op_type = LOOKUP;
   send(socket, &op_type, sizeof(Operation), 0);
   Lyrics *lyrics;
@@ -59,5 +55,19 @@ void lookup_lyrics()
     printf("Lyrics: %s\n", lyrics[i].lyrics);
   }
   free(lyrics);
+  close(socket);
+}
+
+void insert_lyrics(Lyrics *lyrics)
+{
+  int socket = setup_connection();
+  if (socket == -1)
+    return;
+  Operation op_type = INSERT;
+  send(socket, &op_type, sizeof(Operation), 0);
+  send_lyrics(socket, *lyrics);
+  char buf[30] = {0};
+  recv(socket, buf, sizeof(buf), 0);
+  printf("%s\n", buf);
   close(socket);
 }

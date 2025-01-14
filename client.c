@@ -59,13 +59,16 @@ int main(int argc, char **argv)
       return 1;
     }
 
-    // insert_lyrics(db, lyrics);
-  }
+    Lyrics lyrics;
+    lyrics.song_name = argv[2];
+    lyrics.artist = argv[3];
+    lyrics.release_year = atoi(argv[4]);
+    lyrics.lyrics = argv[5];
+    insert_lyrics(&lyrics);
+    }
   else if (strcmp(argv[1], "lookup") == 0)
   {
-    // test printing recv
     lookup_lyrics();
-    // lookup_lyrics(db, query, &lyrics);
   }
   else if (strcmp(argv[1], "config") == 0)
   {

@@ -38,7 +38,7 @@ void handle_client(int client_sock)
 
   Operation op;
   recv(client_sock, &op, sizeof(Operation), 0);
-  printf("Received operation %d\n", op);
+  printf("Received operation %d\n", (int)op);
   switch (op)
   {
   case LOOKUP:
@@ -53,8 +53,14 @@ void handle_client(int client_sock)
   }
 
   case INSERT:
-    break;
-
+  {
+    Lyrics lyrics;
+    recv_lyrics(client_sock, &lyrics);
+    if (insert_lyrics(db, &lyrics))
+      send(client_sock, "Failed to insert lyrics\n", 25, 0);
+    else
+      send(client_sock, "Lyrics inserted successfully\n", 30, 0);
+  }
   default:
     break;
   }
